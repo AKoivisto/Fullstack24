@@ -38,7 +38,6 @@ const App = () => {
       mostPoints = i
     }
   }
-  console.log('maxpoints' ,maxPoints)
 
   const handleSelectClick = () => {setSelected(Random(anecdotes.length))}
   const handleVoteClick = () => {
