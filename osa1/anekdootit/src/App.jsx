@@ -27,6 +27,18 @@ const App = () => {
     'Programming without an extremely heavy use of console.log is same as if a doctor would refuse to use x-rays or blood tests when dianosing patients.',
     'The only way to go fast, is to go well.'
   ]
+  const [selected, setSelected] = useState(0)
+  const [points, setPoints] = useState(new Uint8Array(anecdotes.length))
+  let maxPoints = points[0]
+  let mostPoints = 0
+
+  for (let i = 1; i < points.length; i++) {
+    if (points[i] > maxPoints) {
+      maxPoints = points[i]
+      mostPoints = i
+    }
+  }
+  console.log('maxpoints' ,maxPoints)
 
   const handleSelectClick = () => {setSelected(Random(anecdotes.length))}
   const handleVoteClick = () => {
@@ -35,8 +47,6 @@ const App = () => {
     setPoints(copy)
   }
    
-  const [selected, setSelected] = useState(0)
-  const [points, setPoints] = useState(new Uint8Array(anecdotes.length))
   return (
     <div>
       <p>{anecdotes[selected]}</p>
@@ -44,6 +54,9 @@ const App = () => {
       <p></p>
       <Button handleClick={handleSelectClick} text='next' />
       <Button handleClick={handleVoteClick} text='vote' />
+      <h1>anecdote with most votes</h1>
+      <p>{anecdotes[mostPoints]}</p>
+
     </div>
   )
 }
