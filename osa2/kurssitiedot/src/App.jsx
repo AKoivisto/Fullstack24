@@ -8,14 +8,17 @@ const Header = ({name}) => {
   )
 }
 
-
-const Total = (parts) => {
+const Total = ({parts}) => {
   console.log(parts)
+  let sum = 0
+  for (let index = 0; index < parts.length; index++) {
+    sum += parts[index].exercises
+    
+  }
   return (
-    <p>ei toimi vielä</p>
+    <p>Total of {sum} exercises</p>
   )
 }
-
 
 const Part = ({name , exe}) => {
   console.log(name , exe)
@@ -38,6 +41,7 @@ const Content = ({parts}) => {
     </div>
   )
 }
+
 const Course = ({course}) => {
   console.log(course)
   console.log('kaikki ok')
@@ -47,11 +51,10 @@ const Course = ({course}) => {
     <Content parts={course.parts}/>
     </div>
   )
-  
 }
 
 const App = () => {
-  console.log('wörkkii');
+  console.log('app');
   
   const course = {
     name: 'Half Stack application development',
