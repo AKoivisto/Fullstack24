@@ -38,7 +38,8 @@ const App = () => {
       mostPoints = i
     }
   }
-
+  
+  
   const handleSelectClick = () => {setSelected(Random(anecdotes.length))}
   const handleVoteClick = () => {
     const copy = [...points]
