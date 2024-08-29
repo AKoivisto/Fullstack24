@@ -59,11 +59,38 @@ const PersonForm = ({nName, nNumb, hNameAdd, hNumbAdd, aName}) => {
   )
 }
 
+const Notification = ({message}) => {
+  if (message === null) {
+    return null
+  }
+
+  return (
+    <div className="infomessage">
+      {message}
+    </div>
+  )
+}
+
+const ErrorMessage = ({message}) => {
+  if (message === null) {
+    return null
+  }
+
+  return (
+    <div className="error">
+      {message}
+    </div>
+  )
+
+}
+
 const App = () => {
   const [persons, setPersons] = useState([]) 
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [filterText, setFilterText] = useState('')
+  const [message, setMessage] = useState(null)
+  const [eMessage, setEMessage] = useState(null)
 
   useEffect(() => {
       personService
@@ -97,6 +124,17 @@ const App = () => {
             setPersons(persons.map(person => person.id !== id ? person : response.data))
             setNewName('')
             setNewNumber('')
+            setMessage(`number for ${newName} changed to ${newNumber}`)
+        setTimeout(() => {
+          setMessage(null)
+        },7000)
+          })
+          .catch(error => {
+            setEMessage(`${newName} already removed`)
+            setPersons(persons.filter(person => person.id !== id))
+            setTimeout(()=> {
+              setEMessage(null)
+            },5000)
           })
       }
     }
@@ -113,6 +151,10 @@ const App = () => {
         setPersons(persons.concat(response.data))
         setNewName('')
         setNewNumber('')
+        setMessage(`${newName} added to phonebook`)
+        setTimeout(() => {
+          setMessage(null)
+        },5000)
         console.log(persons)
       })
     }
@@ -126,6 +168,17 @@ const App = () => {
       .then(response => {
         console.log(response)
         setPersons(persons.filter(person => person.id !== id))
+        setMessage(`${person.name} deleted from phonebook`)
+        setTimeout(() => {
+          setMessage(null)
+        },5000) 
+      })
+      .catch(error => {
+        setEMessage(`${person.name} already removed`)
+        setPersons(persons.filter(person => person.id !== id))
+        setTimeout(()=> {
+          setEMessage(null)
+        },5000)
       })
     }
   }
@@ -153,6 +206,8 @@ const App = () => {
   return (
     <div>
       <h1>Phonebook</h1>
+      <Notification message={message}/>
+      <ErrorMessage message={eMessage}/>
       <Filter ft={filterText} handleFT={handleFilterText}/>
      
       <h2>add new</h2>
