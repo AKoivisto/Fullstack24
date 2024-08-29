@@ -1,5 +1,5 @@
+/* eslint-disable react/prop-types */
 import { useState , useEffect } from 'react'
-import axios from 'axios'
 import personService from './services/persons'
 
 const Person = ({person , rm}) => {
@@ -15,7 +15,7 @@ const Persons = ({persons, remove}) => {
   return (
   <div>{persons.map(person =>
     <Person key={person.name} person={person}
-    rm={() => remove(person.id)} />
+    rm={() => remove(person)} />
      )}
   </div>
   )
@@ -82,15 +82,31 @@ const App = () => {
     console.log(names)
 
     if (names.includes(newName)) {
-      alert(`${newName} is already added to phonebook`)
+      if (window.confirm(`${newName} is already added to phonebook.
+        Do you want to replace the old number with a new one?`)) {
+
+        const personToFind = persons.find(person => person.name === newName)
+        const id = personToFind.id
+        const changedPerson = {...personToFind, number: newNumber}
+        console.log({id},{newNumber});
+        console.log(persons)
+        
+        personService
+          .update(id,changedPerson)
+          .then(response => {
+            setPersons(persons.map(person => person.id !== id ? person : response.data))
+            setNewName('')
+            setNewNumber('')
+          })
+      }
     }
     else {
-      const nameObject = {
-        name: newName,
-        number: newNumber,
-        id: String(persons.length +1),
-      }
-    
+    const nameObject = {
+      name: newName,
+      number: newNumber,
+      id: String(persons.length +1),
+    }
+      
     personService
       .create(nameObject)
       .then(response => {
@@ -99,17 +115,19 @@ const App = () => {
         setNewNumber('')
         console.log(persons)
       })
-    
     }
   }
 
-  const removeName = (id) => {
-    personService
-    .remove(id)
-    .then(response => {
-      console.log(response)
-      setPersons(persons.filter(person => person.id !== id))
-    })
+  const removeName = (person) => {
+    const id = person.id
+    if (window.confirm(`Delete ${person.name}?`)) {
+      personService
+      .remove(id)
+      .then(response => {
+        console.log(response)
+        setPersons(persons.filter(person => person.id !== id))
+      })
+    }
   }
 
   const handleNameAdd = (event) => {
@@ -123,7 +141,7 @@ const App = () => {
   }
 
   const handleFilterText = (event) => {
-    console.log(event.target.value)
+    //console.log(event.target.value)
     {setFilterText(event.target.value)}
   }
 

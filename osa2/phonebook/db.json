@@ -2,7 +2,7 @@
   "persons": [
     {
       "name": "Arto Hellas",
-      "number": "040-123456",
+      "number": "0505058010-12123",
       "id": "1"
     },
     {
@@ -12,18 +12,13 @@
     },
     {
       "name": "Dan Abramov",
-      "number": "12-43-234345",
+      "number": "11525-123",
       "id": "3"
     },
     {
-      "name": "Mary Poppendieck",
-      "number": "39-23-6423122",
-      "id": "4"
-    },
-    {
-      "id": "5",
-      "name": "Sippu Sippula",
-      "number": "4310"
+      "id": "4",
+      "name": "Test Tester",
+      "number": "123123"
     }
   ]
 }
