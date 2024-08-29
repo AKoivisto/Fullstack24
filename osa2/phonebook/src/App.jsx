@@ -1,17 +1,21 @@
 import { useState , useEffect } from 'react'
 import axios from 'axios'
+import personService from './services/persons'
 
-const Person = ({person}) => {
+const Person = ({person , rm}) => {
   return (
-  <p>{person.name} {person.number}</p>
+    <div>
+      {person.name} {person.number}
+      <button onClick={rm}>delete</button>
+    </div>
   )
 }
 
-const Persons = ({persons}) => {
-
+const Persons = ({persons, remove}) => {
   return (
   <div>{persons.map(person =>
-    <Person key={person.name} person={person} />
+    <Person key={person.name} person={person}
+    rm={() => remove(person.id)} />
      )}
   </div>
   )
@@ -62,20 +66,17 @@ const App = () => {
   const [filterText, setFilterText] = useState('')
 
   useEffect(() => {
-    console.log('effect')
-    axios
-      .get('http://localhost:3001/persons')
+      personService
+      .getAll()
       .then(response => {
-        console.log('promise fulfilled')
         setPersons(response.data)
       })
   }, [])
-  console.log('render', persons.length,'persons')
+  //console.log('render', persons.length,'persons')
 
   const addName = (event) => {
     event.preventDefault()
     console.log('button clicked', event.target)
-    console.log(newName)
 
     const names = persons.map(person => person.name)
     console.log(names)
@@ -89,25 +90,35 @@ const App = () => {
         number: newNumber,
         id: String(persons.length +1),
       }
-
-    axios
-    .post('http://localhost:3001/persons', nameObject)
-    .then(response => {
-      console.log(response)
-      setPersons(persons.concat(response.data))
-      setNewName('')
-      setNewNumber('')
-    })
+    
+    personService
+      .create(nameObject)
+      .then(response => {
+        setPersons(persons.concat(response.data))
+        setNewName('')
+        setNewNumber('')
+        console.log(persons)
+      })
+    
     }
   }
 
+  const removeName = (id) => {
+    personService
+    .remove(id)
+    .then(response => {
+      console.log(response)
+      setPersons(persons.filter(person => person.id !== id))
+    })
+  }
+
   const handleNameAdd = (event) => {
-    console.log(event.target.value)
+    //console.log(event.target.value)
     setNewName(event.target.value)
   }
 
   const handleNumberAdd = (event) => {
-    console.log(event.target.value)
+    //console.log(event.target.value)
     setNewNumber(event.target.value)
   }
 
@@ -131,7 +142,7 @@ const App = () => {
       {handleNameAdd} hNumbAdd={handleNumberAdd} aName={addName}/>
       
       <h2>Numbers</h2>
-      <Persons persons={filtered} />
+      <Persons persons={filtered} remove={removeName} />
     </div>
   )
 
