@@ -17,26 +17,17 @@ const Filter = ({ft, handleFT}) => {
   )
 
 }
-// const Languages = ({country}) => {
-//   return (
-//     <div>
-//       <h2>Languages:</h2>
-//       <div>
-//         {country.map(language => 
-//           <
-//         )}
-//       </div>
-//     </div>
-//   )
-// }
-const CountryLine = ({country}) => {
+
+const CountryLine = ({country, handleClick}) => {
   return (
     <div>
-      <p>{country}</p>
+      {country}
+      <button onClick={()=> handleClick(country)}>
+        show
+      </button>
     </div>
   )
 }
-
 
 const Weather = ({location}) => {
   const [weather, setWeather] = useState(undefined)
@@ -48,10 +39,9 @@ const Weather = ({location}) => {
     .getWeather(lat,lon)
     .then(response => {
       setWeather(response.data)
-      console.log(weather)
+      //console.log(weather)
     })
   },[])
-
 
   if(!weather) {
     return null
@@ -60,16 +50,16 @@ const Weather = ({location}) => {
   const temps = weather.main
   const temp = Math.round((temps.temp - 272.15))
   const wind = weather.wind.speed
-  console.log(temp)
+  //console.log(temp)
   const icon = weather.weather[0].icon
-  console.log(icon);
+  //console.log(icon);
   
 
   return (
     <div>
     <p>temperature: {temp} C</p>
     <p>wind: {wind} m/s</p>
-    <img src={`https://openweathermap.org/img/wn/${icon}@2x.png`} />
+    <img className="icon" src={`https://openweathermap.org/img/wn/${icon}@2x.png`} alt ="icon not found"/>
     </div>
   )
 }
@@ -95,16 +85,15 @@ const CountryStats = ({country}) => {
             <li key={language}>{language}</li>
           ))}
       </ul>
-      <img src={country.flags.png}/>
+      <img src={country.flags.png} alt ="flag not found"/>
       <h3>Weather in {country.capital}</h3>
       <Weather location={country.capitalInfo.latlng} />
     </div>
   )
 }
 
-const CountryList = ({ft, countries}) => {
+const CountryList = ({ft, countries, handleClick}) => {
   //console.log('ft:',ft,countries);
-
   const countryList = countries.map(country => country.name.common)
   //console.log({countryList});
   const filteredList = countryList.filter((country) =>
@@ -129,7 +118,7 @@ const CountryList = ({ft, countries}) => {
   return(
      <div>
        {filteredList.map(country =>
-        <CountryLine key={country} country={country} />
+        <CountryLine key={country} country={country} handleClick={handleClick} />
        )}
      </div>
   )
@@ -144,6 +133,12 @@ function App() {
     console.log(event.target.value)
     {setFilterText(event.target.value)}
   }
+
+  const handleClick = ((country) => {
+    console.log('show')
+    setFilterText(country)
+    console.log(country)
+  })
 
   useEffect(() => {
     countryService
@@ -162,14 +157,11 @@ function App() {
   //console.log(countries)
   console.log('filter text:' , filterText);
   
-
-
-  
   return (
     <div>
       <h1>Countries</h1>
       <Filter ft={filterText} handleFT={handleFilterText}/>
-      <CountryList ft={filterText} countries={countries}/>
+      <CountryList ft={filterText} handleClick={handleClick} countries={countries}/>
     </div>
   )
 }
