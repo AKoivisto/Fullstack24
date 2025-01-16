@@ -32,4 +32,55 @@ describe('unicafe reducer', () => {
       bad: 0
     })
   })
+
+  test('bad is clicked twice', () => {
+    const action = {
+      type: 'BAD'
+    }
+    const state = initialState
+
+    deepFreeze(state)
+    const newState = counterReducer(state, action)
+    const newState2 = counterReducer(newState, action)
+    expect(newState2).toEqual({
+      good: 0,
+      ok: 0,
+      bad: 2
+    })
+  })
+
+  test('ok button is clicked twice', () => {
+    const action = {
+      type: 'OK'
+    }
+    const state = initialState
+
+    deepFreeze(state)
+    const newState = counterReducer(state, action)
+    const newState2 = counterReducer(newState, action)
+    expect(newState2).toEqual({
+      good: 0,
+      ok: 2,
+      bad: 0
+    })
+  })
+
+  test('reset stats button is working', () => {
+    const action = {
+      type: 'ZERO'
+    }
+    const state = {
+      good: 5,
+      ok: 3,
+      bad: 8
+    }
+
+    deepFreeze(state)
+    const newState = counterReducer(state, action)
+    expect(newState).toEqual({
+      good: 0,
+      ok: 0,
+      bad: 0
+    })
+  })
 })
