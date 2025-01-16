@@ -88,7 +88,7 @@ const App = () => {
   const [persons, setPersons] = useState([]) 
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
-  const [filterText, setFilterText] = useState('')
+  const [filterText, setFilterText] = useState("")
   const [message, setMessage] = useState(null)
   const [eMessage, setEMessage] = useState(null)
 
@@ -156,6 +156,13 @@ const App = () => {
           setMessage(null)
         },5000)
         console.log(persons)
+      })
+      .catch(error => {
+        setEMessage(error.response.data.error)
+        console.log(error.response.data.error)
+        setTimeout(()=> {
+          setEMessage(null)
+        },5000)
       })
     }
   }

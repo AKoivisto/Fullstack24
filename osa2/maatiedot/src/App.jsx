@@ -15,7 +15,6 @@ const Filter = ({ft, handleFT}) => {
   </div>
   </form>
   )
-
 }
 
 const CountryLine = ({country, handleClick}) => {
