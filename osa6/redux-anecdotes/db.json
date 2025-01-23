@@ -2,7 +2,7 @@
   "anecdotes": [
     {
       "content": "If it hurts, do it more often",
-      "votes": 18,
+      "votes": 44,
       "id": "47145"
     },
     {
@@ -12,7 +12,7 @@
     },
     {
       "content": "The first 90 percent of the code accounts for the first 10 percent of the development time...The remaining 10 percent of the code accounts for the other 90 percent of the development time.",
-      "votes": 96,
+      "votes": 155,
       "id": "69581"
     },
     {
@@ -59,6 +59,11 @@
       "content": "Debugging is nice",
       "votes": 2,
       "id": "1bf6"
+    },
+    {
+      "id": "6f71",
+      "content": "If fullstack open is hard, you need to practice more",
+      "votes": 0
     }
   ]
 }
